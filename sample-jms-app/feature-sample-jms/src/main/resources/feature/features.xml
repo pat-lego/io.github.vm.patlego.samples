@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<features name="io.github.vm.patlego.jms-{project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+
+    <repository>mvn:org.apache.karaf.features/spring-legacy/4.3.0/xml/features</repository>
+    <repository>mvn:org.apache.activemq/activemq-karaf/[5.14,6)/xml/features</repository>
+
+    <feature name="patlego-vm-example-activemq" version="${project.version}">
+        <feature version="[4,5)">spring</feature>
+        <feature>aries-blueprint</feature>
+        <feature>activemq-broker</feature>
+    </feature>
+
+    <feature name="patlego-vm-example-connectionfactory" version="1.0-SNAPSHOT">
+        <feature>activemq-client</feature>
+        <feature>jms</feature>
+        <feature>pax-jms-activemq</feature>
+        <config name="org.ops4j.connectionfactory-test">
+            name=patleg-vm-jms-sample
+            osgi.jndi.service.name=jms/patlego-vm-sample
+            password=karaf
+            pool=transx
+            type=activemq
+            url=tcp://localhost:61616
+            user=karaf
+        </config>
+    </feature>
+
+    <feature name="patlego-vm-example-jms" version="1.0-SNAPSHOT">
+        <feature>patlego-vm-example-activemq</feature>
+        <feature>patlego-vm-example-connectionfactory</feature>
+        <bundle>mvn:io.github.vm.patlego.jms/core-sample-jms/1.0-SNAPSHOT</bundle>
+    </feature>
+
+</features>
