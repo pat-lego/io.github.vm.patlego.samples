@@ -15,34 +15,7 @@
 -->
 <features name="io.github.vm.patlego.jms-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:org.apache.karaf.features/spring-legacy/4.3.0/xml/features</repository>
-    <repository>mvn:org.apache.activemq/activemq-karaf/[5.14,6)/xml/features</repository>
-
-    <feature name="patlego-vm-example-activemq" version="${project.version}">
-        <feature version="[4,5)">spring</feature>
-        <feature>aries-blueprint</feature>
-        <feature>shell-compat</feature>
-        <feature>activemq-broker</feature>
-    </feature>
-
-    <feature name="patlego-vm-example-jms-connectionfactory" version="${project.version}">
-        <feature>activemq-client</feature>
-        <feature>jms</feature>
-        <feature>pax-jms-activemq</feature>
-        <config name="org.ops4j.connectionfactory-activemq1">
-            name=patlego-vm-activemq1
-            osgi.jndi.service.name=jms/patlego-vm-activemq1
-            password=karaf
-            pool=transx
-            type=activemq
-            url=tcp://localhost:61616
-            user=karaf
-        </config>
-    </feature>
-
-    <feature name="patlego-vm-example-jms" version="${project.version}">
-        <feature>patlego-vm-example-activemq</feature>
-        <feature>patlego-vm-example-jms-connectionfactory</feature>
+    <feature name="patlego-vm-example-jms-commands" version="${project.version}">
         <bundle>mvn:io.github.vm.patlego.jms/core-sample-jms/1.0-SNAPSHOT</bundle>
     </feature>
 
