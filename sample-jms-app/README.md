@@ -12,12 +12,26 @@ This sample uses ActiveMQ as a messaging agent to send messages into a Queue or 
 
 ## Commands 
 
-Drop the feature.xml file into the deploy folder of the running Karaf instance and then execute the following command
+### Queue Commands 
 
-`examples:send TEST TEST`
+`examples:queue-send TEST TEST`
 
 This will create a queue called TEST and then send the message TEST through it.
 
-`examples:consume TEST`
+`examples:queue-consume TEST`
 
 This will connect to the queue TEST and consume the message that was sent in it.
+
+### SCR Queue Listener
+
+The `SAMPLE_QUEUE_1` is listening to an OSGi service and thus if you send a message using `queue-send` command you will see log file entries passing in.
+
+### Topic Commands
+
+`examples:topic-send TEST TEST`
+
+This will create a TOPIC called TEST and send the message TEST into the TOPIC
+
+### SCR Topic Listener
+
+The `SCRTopicConsumer1` and `SCRTopicConsumer2` will listen to the `SAMPLE_TOPIC_1` topic and thus if you send a message in the topic you will see 2 entries in the log file one from the `SCRTopicConsumer1` and the other from the `SCRTopicConsumer2`.
