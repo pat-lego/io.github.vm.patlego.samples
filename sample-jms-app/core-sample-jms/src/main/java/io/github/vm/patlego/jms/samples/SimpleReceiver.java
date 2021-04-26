@@ -3,7 +3,9 @@ package io.github.vm.patlego.jms.samples;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
@@ -35,19 +37,13 @@ public class SimpleReceiver implements Action {
 
         try {
             connection = connectionFactory.createConnection();
-            connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Destination destination = session.createQueue(queue);
             MessageConsumer consumer = session.createConsumer(destination);
-            TextMessage message = (TextMessage) consumer.receive(60000);
-            if (message == null) {
-                throw new IllegalStateException("No message received");
-            } else {
-                logger.info("Received a message from the JMS queue");
-                result = message.getText();
-            }
-        }
-        finally {
+            consumer.setMessageListener(new SimpleMessageListener());
+            connection.start();
+            Thread.sleep(1000);
+        } finally {
             if (session != null) {
                 session.close();
             }
@@ -55,7 +51,26 @@ public class SimpleReceiver implements Action {
                 connection.close();
             }
         }
-         return result;
+        return result;
     }
-    
+
+    public class SimpleMessageListener implements MessageListener {
+
+        @Override
+        public void onMessage(Message message) {
+            try {
+                TextMessage textmessage = (TextMessage) message;
+                if (message == null) {
+                    throw new IllegalStateException("No message received");
+                } else {
+                    logger.info("Received a message from the JMS queue - {}", textmessage.getText());
+                }
+            } catch (Exception e) {
+                logger.error("Caught error when processing queue message", e);
+            }
+
+        }
+
+    }
+
 }
