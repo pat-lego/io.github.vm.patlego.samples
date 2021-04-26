@@ -1,4 +1,4 @@
-package io.github.vm.patlego.jms.samples;
+package io.github.vm.patlego.jms.samples.commands;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -14,15 +14,14 @@ import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 
 @Service
-@Command(scope = "examples", name = "queue-send", description = "Send a message to a JMS queue")
-public class CommandQueueSender implements Action {
+@Command(scope = "examples", name = "topic-send", description = "Send a message to a JMS topic")
+public class CommandTopicSender implements Action {
 
-    @Argument(index = 0, name = "queue", description = "Name of the queue", required = true, multiValued = false)
+    @Argument(index = 0, name = "topic", description = "Name of the topic", required = true, multiValued = false)
     String queue;
 
     @Argument(index = 1, name = "message", description = "Message payload to send", required = true, multiValued = false)
     String message;
-
 
     @Reference
     ConnectionFactory connectionFactory;
@@ -31,11 +30,12 @@ public class CommandQueueSender implements Action {
     public Object execute() throws Exception {
         Connection connection = null;
         Session session = null;
+        
         try {
             connection = connectionFactory.createConnection();
             connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue(queue);
+            Destination destination = session.createTopic(queue);
             MessageProducer producer = session.createProducer(destination);
             TextMessage textMessage = session.createTextMessage(message);
             producer.send(textMessage);
@@ -53,4 +53,5 @@ public class CommandQueueSender implements Action {
         return null;
     }
 
+    
 }

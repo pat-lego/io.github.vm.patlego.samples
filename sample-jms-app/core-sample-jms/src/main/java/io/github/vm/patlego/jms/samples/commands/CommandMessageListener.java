@@ -1,4 +1,4 @@
-package io.github.vm.patlego.jms.samples;
+package io.github.vm.patlego.jms.samples.commands;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -6,7 +6,7 @@ import javax.jms.TextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SimpleMessageListener implements MessageListener {
+public class CommandMessageListener implements MessageListener {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 

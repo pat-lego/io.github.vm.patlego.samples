@@ -13,10 +13,13 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.vm.patlego.jms.samples.constants.Constants;
+import io.github.vm.patlego.jms.samples.messagelistener.SimpleMessageListener;
+
 @Component
 public class SCRQueueConsumer {
 
-    @Reference
+    @Reference(target = "(name=patlego-vm-activemq1)")
     ConnectionFactory connectionFactory;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

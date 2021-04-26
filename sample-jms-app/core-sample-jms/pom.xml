@@ -38,13 +38,18 @@
         <configuration>
           <instructions>
             <Private-Package>
-                  io.github.vm.patlego.jms.samples
+                  io.github.vm.patlego.jms.samples.commands
             </Private-Package>
             <Import-Package>
-                  org.apache.karaf.shell*;version="[4,5)",
-                  javax.jms*;version="[1,3)",
+                  org.apache.karaf.shell.*;version="[4,5)",
+                  javax.jms.*;version="[1,3)",
                   *
               </Import-Package>
+              <Export-Package>
+                io.github.vm.patlego.jms.samples.constants.*,
+                io.github.vm.patlego.jms.samples.messagelistener.*
+                io.github.vm.patlego.jms.samples.*
+              </Export-Package>
           </instructions>
         </configuration>
       </plugin>

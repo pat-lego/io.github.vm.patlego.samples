@@ -1,4 +1,4 @@
-package io.github.vm.patlego.jms.samples;
+package io.github.vm.patlego.jms.samples.constants;
 
 public class Constants {
     

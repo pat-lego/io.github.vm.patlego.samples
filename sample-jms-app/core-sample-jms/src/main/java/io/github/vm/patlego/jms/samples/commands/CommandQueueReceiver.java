@@ -1,11 +1,10 @@
-package io.github.vm.patlego.jms.samples;
+package io.github.vm.patlego.jms.samples.commands;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
-import javax.jms.MessageProducer;
+import javax.jms.MessageConsumer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
@@ -14,14 +13,11 @@ import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 
 @Service
-@Command(scope = "examples", name = "topic-send", description = "Send a message to a JMS topic")
-public class CommandTopicSender implements Action {
+@Command(scope = "examples", name = "queue-consume", description = "Consume a message from a JMS queue")
+public class CommandQueueReceiver implements Action {
 
-    @Argument(index = 0, name = "topic", description = "Name of the topic", required = true, multiValued = false)
+    @Argument(index = 0, name = "queue", description = "Name of the queue", required = true, multiValued = false)
     String queue;
-
-    @Argument(index = 1, name = "message", description = "Message payload to send", required = true, multiValued = false)
-    String message;
 
     @Reference
     ConnectionFactory connectionFactory;
@@ -30,17 +26,16 @@ public class CommandTopicSender implements Action {
     public Object execute() throws Exception {
         Connection connection = null;
         Session session = null;
-        
+        String result = null;
+
         try {
             connection = connectionFactory.createConnection();
-            connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createTopic(queue);
-            MessageProducer producer = session.createProducer(destination);
-            TextMessage textMessage = session.createTextMessage(message);
-            producer.send(textMessage);
-            session.close();
-            connection.close();
+            Destination destination = session.createQueue(queue);
+            MessageConsumer consumer = session.createConsumer(destination);
+            consumer.setMessageListener(new CommandMessageListener());
+            connection.start();
+            Thread.sleep(1000);
         } finally {
             if (session != null) {
                 session.close();
@@ -49,9 +44,6 @@ public class CommandTopicSender implements Action {
                 connection.close();
             }
         }
-
-        return null;
+        return result;
     }
-
-    
 }
